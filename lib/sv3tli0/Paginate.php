@@ -8,13 +8,21 @@ namespace sv3tli0;
 
 class Paginate
 {
+	# Current page
+	private $current;
+	# Total pages
+	private $totals;
+	# total items must be set !
+	private $itemsTotal = 0;
+
+	# baseUrl for the links
 	protected $baseUrl = FALSE;
+	# display prev/next buttons
 	protected $show_PrevNext = FALSE;
+	# display first/last buttons
 	protected $show_FirstLast = FALSE;
-	protected $itemsTotal = 0;
+	# items per page
 	protected $itemsPerPage = 20;
-	protected $current = 1;
-	protected $totals;
 	# methods are 2: query and segment
 	# 1 (query)   - is if you use $_GET['param'] for catching page
 	# 2 (segment) - is if you use url without GET's - /1/2/3/.. segments at url for catching page
@@ -34,8 +42,10 @@ class Paginate
 	# Pages
 	protected $pages = [];
 
-	public function __construct($param = array())
+	public function __construct($itemsTotal, $param = array())
 	{
+		$this->itemsTotal = (int)$itemsTotal;
+
 		foreach ($param as $name => $value) {
 			if (property_exists($this, $name)) {
 				$this->$name = $value;
@@ -58,9 +68,9 @@ class Paginate
 		return $this->pages;
 	}
 
-	public function renderHtml($path = FALSE, $layout = FALSE, $engine = FALSE, $object = FALSE)
+	public function renderHtml($layout = FALSE, $engine = FALSE, $object = FALSE)
 	{
-		$layout = new Layout($path, $layout, $this->pages, $engine, $object);
+		$layout = new Layout($layout, $this->pages, $engine, $object);
 		return $layout->getHTML();		
 	}
 

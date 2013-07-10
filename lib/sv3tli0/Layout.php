@@ -8,27 +8,18 @@ namespace sv3tli0;
 
 class Layout
 {
-	private $path;
 	private $layout;
 	private $data;
 	private $engine;
 	private $object;
 
-	public function __construct($path = FALSE, $layout = FALSE, $data = [], $engine = FALSE, $object = FALSE)
+	public function __construct($layout = FALSE, $data = [], $engine = FALSE, $object = FALSE)
 	{
-		$this->path = $path?: dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'layouts';
-		if(!realpath($this->path)){
-			throw new Exception("Layouts path is not correct!", 1);
+		if(!$layout){
+			$layout = dirname(dirname(__DIR__)) . '/layouts/' .($engine ? "bootstrap_$engine.php" : "bootstrap.php");
 		}
 
-		$layout = $layout ?: ($engine ? "bootstrap_$engine.php" : "bootstrap.php");
-
-		if(realpath($this->path . DIRECTORY_SEPARATOR . $layout)){
-			$this->layout = $this->path . DIRECTORY_SEPARATOR . $layout;
-		} else{
-			throw new Exception("Incorrect layout path!", 1);
-		}
-		
+		$this->layout = $layout;
 		$this->data = $data;
 		$this->engine = $engine;
 		$this->object = $object;
@@ -50,6 +41,10 @@ class Layout
 
 	private function renderPhpLayout()
 	{
+		if(!realpath($this->layout)){
+			throw new Exception("Wrong layout path: <{$this->layout}>", 1);
+		}
+
 		$data = $this->data;
 		ob_start();
 		include_once($this->layout);
