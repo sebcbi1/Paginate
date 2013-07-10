@@ -14,12 +14,14 @@ class Layout
 	private $engine;
 	private $object;
 
-	public function __construct($path = FALSE, $layout = 'bootstrap.php', $data = [], $engine = FALSE, $object = FALSE)
+	public function __construct($path = FALSE, $layout = FALSE, $data = [], $engine = FALSE, $object = FALSE)
 	{
-		$this->path = $path?: __DIR__ . DIRECTORY_SEPARATOR . 'layouts';
+		$this->path = $path?: dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'layouts';
 		if(!realpath($this->path)){
 			throw new Exception("Layouts path is not correct!", 1);
 		}
+
+		$layout = $layout ?: ($engine ? "bootstrap_$engine.php" : "bootstrap.php");
 
 		if(realpath($this->path . DIRECTORY_SEPARATOR . $layout)){
 			$this->layout = $this->path . DIRECTORY_SEPARATOR . $layout;
@@ -30,7 +32,6 @@ class Layout
 		$this->data = $data;
 		$this->engine = $engine;
 		$this->object = $object;
-
 	}
 
 	private function renderLayout()

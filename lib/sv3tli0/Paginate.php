@@ -32,7 +32,7 @@ class Paginate
 	# FirstLast data
 	protected $FirstLast = ["firstName" => "First", "lastName" => "Last"];
 	# Pages
-	public $pages = [];
+	protected $pages = [];
 
 	public function __construct($param = array())
 	{
@@ -51,6 +51,11 @@ class Paginate
 
 		# Group all pages in correct order 
 		$this->setPages();
+	}
+
+	public function getPages()
+	{
+		return $this->pages;
 	}
 
 	public function renderHtml($path = FALSE, $layout = FALSE, $engine = FALSE, $object = FALSE)
