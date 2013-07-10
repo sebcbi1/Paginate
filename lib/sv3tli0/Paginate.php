@@ -1,0 +1,179 @@
+<?php
+namespace sv3tli0;
+/**
+ * @author sv3tli0 <sfetliooo@gmail.com>
+ * @copyright Copyright (c) 2013 sv3tli0
+ * @license http://github.com/sv3tli0
+ */
+
+class Paginate
+{
+	protected $baseUrl = FALSE;
+	protected $show_PrevNext = FALSE;
+	protected $show_FirstLast = FALSE;
+	protected $itemsTotal = 0;
+	protected $itemsPerPage = 20;
+	protected $current = 1;
+	protected $totals;
+	# methods are 2: query and segment
+	# 1 (query)   - is if you use $_GET['param'] for catching page
+	# 2 (segment) - is if you use url without GET's - /1/2/3/.. segments at url for catching page
+	protected $method = 'query';
+	# for method 1 you need param name
+	protected $param = "page";
+	# for method 2 you need segment number usually its 2-3 or 4 depening on target slash "domain/1segment/2segment/3segment/4...".
+	protected $segment = 3;
+	# displayed links (dosn't matter for First, Last, Prev or Next)
+	protected $displayedPages = 7;
+	# prepared string for build urls
+	private $urlString = '';
+	# PrevNext data
+	protected $PrevNext = ["prevName" => "&laquo;", "nextName" => "&raquo;"];
+	# FirstLast data
+	protected $FirstLast = ["firstName" => "First", "lastName" => "Last"];
+	# Pages
+	public $pages = [];
+
+	public function __construct($param = array())
+	{
+		foreach ($param as $name => $value) {
+			if (property_exists($this, $name)) {
+				$this->$name = $value;
+			}
+		}
+		$this->init();
+ 	} 
+	
+	private function init()
+	{
+		# Start up tasks
+		$this->startTasks();
+
+		# Group all pages in correct order 
+		$this->setPages();
+	}
+
+	public function renderHtml($path = FALSE, $layout = FALSE, $engine = FALSE, $object = FALSE)
+	{
+		$layout = new Layout($path, $layout, $this->pages, $engine, $object);
+		return $layout->getHTML();		
+	}
+
+	private function startTasks()
+	{
+		# prepare and set urlString for later building of link urls (depends on method)
+		$this->setUrlString();
+
+		# calculate total pages
+		$this->calculateTotalPages();
+
+	}
+
+	private function calculateTotalPages()
+	{
+		$this->totals = (int) ceil($this->itemsTotal / $this->itemsPerPage);
+	}
+
+	private function setCurrentPage($page)
+	{
+		$this->current = (int)$page > 1 ? (int)$page : 1;
+	}
+
+	private function setUrlString()
+	{
+		$url = $this->baseUrl ?: $_SERVER["REQUEST_URI"];
+		$urlCl = new URL($url);
+		$method = $this->method == "segment" ? "segments" : "params";
+		$param = $this->method == "segment" ? $this->segment : $this->param;
+
+		$elements = $urlCl->getElements($method);
+		$this->setCurrentPage(isset($elements[$param])?$elements[$param]:1);
+		$elements[$param] = "{{{PAGE}}}";
+
+		$urlCl->updateElements($elements, $method);
+		$this->urlString = $urlCl->fetchRebuildedUrl();
+		unset($urlCl);
+	}
+
+	private function setPages()
+	{	
+		if($this->show_PrevNext != FALSE){
+			$this->setSpecPage('prev');
+		}
+		if($this->show_FirstLast != FALSE){
+			$this->setSpecPage('first');
+		}
+
+		$this->generatePages();
+
+		if($this->show_FirstLast != FALSE){
+			$this->setSpecPage('last');
+		}
+		if($this->show_PrevNext != FALSE){
+			$this->setSpecPage('next');
+		}
+ 	}
+
+ 	/**
+ 	 * Calculates and generate all pages except specials (first,last,next,prev);
+ 	 * @return [type] [description]
+ 	 */
+	private function generatePages()
+	{
+		$dif = floor($this->displayedPages / 2);
+
+		$first = ($this->current - $dif) > 1 ? $this->current - $dif : 1;
+		$last = ($this->current + $dif) < $this->totals ? $this->current + $dif : $this->totals;
+		if($first == 1 && $last < $this->totals){
+			$last = (1 + $dif*2) < $this->totals ? (1 + $dif*2)  : $this->totals; 
+		} elseif($last == $this->totals && $first > 1){
+			$first = ($last - $dif*2) > 1 ? ($last - $dif*2) : 1; 
+		}
+
+		if($first > $last) {
+			throw new Exception("First page can't be more than last!", 1);
+		}
+
+		for ($i=$first; $i <= $last; $i++) { 
+			$this->setPage((int)$i);
+		}
+	}
+
+ 	/**
+ 	 * Generates all special pages (first,last,next,prev);
+ 	 * @return [type] [description]
+ 	 */
+ 	private function setSpecPage($type)
+ 	{
+		if( $type == 'prev' ) {
+			$val = $this->current>1 ? ( $this->current < $this->totals ? $this->current-1 : $this->totals ) : FALSE;
+			$this->setPage($val, FALSE, $val==FALSE, $this->PrevNext["prevName"], $type);
+		} elseif( $type == 'next' ) {
+			$val = $this->current < $this->totals ? ( $this->current >= 1 ? $this->current + 1 : 1 ): FALSE;
+			$this->setPage($val, FALSE, $val==FALSE, $this->PrevNext["nextName"], $type);
+		} elseif ( $type == 'first' ) {
+			$val = $this->current > 1 ? 1 : FALSE;
+			$this->setPage($val, FALSE, $val==FALSE, $this->FirstLast["firstName"], $type);
+		} elseif ( $type == 'last' ){
+			$val = $this->current < $this->totals ? $this->totals : FALSE;
+			$this->setPage($val, FALSE, $val==FALSE, $this->FirstLast["lastName"], $type);
+		}
+ 	}
+
+	private function setPage($numb, $current = FALSE, $disabled = FALSE, $name = FALSE, $type = FALSE)
+	{
+		$this->pages[($type?:count($this->pages))] = $this->getPageData($numb, $current?:($this->current===$numb), $disabled, $name?:$numb);
+	}
+
+	private function getUrl($page = FALSE)
+	{
+		return $page ? str_replace("{{{PAGE}}}", $page, $this->urlString) : "#";
+	}
+
+	private function getPageData($page, $current = FALSE, $disabled = FALSE, $name = FALSE)
+	{
+		return array("url" => $this->getUrl($page), "value"=>$page, "name"=>$name?:$page, "current"=>$current, "disabled"=>$disabled);
+	}
+
+}
+
