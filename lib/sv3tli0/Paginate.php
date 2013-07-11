@@ -118,13 +118,13 @@ class Paginate
 		if($this->show_PrevNext != FALSE){
 			$this->setSpecPage('prev');
 		}
-		if($this->show_FirstLast != FALSE){
+		if($this->show_FirstLast != FALSE && $this->FirstToLast == FALSE){
 			$this->setSpecPage('first');
 		}
 
 		$this->generatePages();
 
-		if($this->show_FirstLast != FALSE){
+		if($this->show_FirstLast != FALSE && $this->FirstToLast == FALSE){
 			$this->setSpecPage('last');
 		}
 		if($this->show_PrevNext != FALSE){
@@ -152,24 +152,32 @@ class Paginate
 			throw new Exception("First page can't be more than last!", 1);
 		}
 
-		$separators =  [];
+		if($this->FirstToLast){
+			$this->setPage(1);
+		}
+
+		for ($i=(int)$first; $i <= (int)$last; $i++) {
+			if($this->FirstToLast){
+				if($i == $first){
+					if( $i - 1 >= 1 ){
+						$this->setSeparator();
+					}
+					continue;
+				}
+				if($i == $last){
+					if( $this->totals - 1 >= $i ){
+						$this->setSeparator();
+					}
+					continue;
+				}
+			}
+			$this->setPage($i);							
+		}
 
 		if($this->FirstToLast){
-			if(($this->current - $first) >= 2 ){
-				$separators[] = $first;
-			}
-			if(($this->totals - $last) >= 2 ){
-				$separators[] = $last;
-			}			
+			$this->setPage($this->totals);
 		}
 
-		for ($i=$first; $i <= $last; $i++) { 
-			if(in_array((int)$i, $separators)){
-				$this->setSeparator();
-			} else{
-				$this->setPage((int)$i);				
-			}
-		}
 	}
 
  	/**
@@ -186,18 +194,16 @@ class Paginate
 			$this->setPage($val, FALSE, $val==FALSE, $this->PrevNext["nextName"], $type);
 		} elseif ( $type == 'first' ) {
 			$val = $this->current > 1 ? 1 : FALSE;
-			$name = (isset($this->FirstLast["firstName"]) && !$this->FirstToLast ) ? $this->FirstLast["firstName"] : $val;
-			$this->setPage($val, FALSE, $val==FALSE, $name, $type);
+  			$this->setPage($val, FALSE, $val==FALSE, (isset($this->FirstLast["firstName"]) ? $this->FirstLast["firstName"] : $val), $type);
 		} elseif ( $type == 'last' ){
 			$val = $this->current < $this->totals ? $this->totals : FALSE;
-			$name = (isset($this->FirstLast["lastName"]) && !$this->FirstToLast ) ? $this->FirstLast["lastName"] : $val;
-			$this->setPage($val, FALSE, $val==FALSE, $name, $type);
+ 			$this->setPage($val, FALSE, $val==FALSE, (isset($this->FirstLast["lastName"]) ? $this->FirstLast["lastName"] : $val), $type);
 		}
  	}
 
  	private function setSeparator()
  	{
-		$this->pages[] = $this->getPageData($separator = TRUE);
+		$this->pages[] = $this->getPageData(FALSE, FALSE, FALSE, FALSE, TRUE);
  	}
 
 	private function setPage($numb, $current = FALSE, $disabled = FALSE, $name = FALSE, $type = FALSE)
