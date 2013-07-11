@@ -102,7 +102,7 @@ class Paginate
 		$param = $this->method == "segment" ? $this->segment : $this->param;
 
 		$elements = $urlCl->getElements($method);
-		$this->setCurrentPage(isset($elements[$param])?$elements[$param]:1);
+		$this->setCurrentPage(isset($this->current) ? $this->current : (isset($elements[$param])?$elements[$param]:1));
 		$elements[$param] = "{{{PAGE}}}";
 
 		$urlCl->updateElements($elements, $method);
