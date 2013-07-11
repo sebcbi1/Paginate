@@ -19,6 +19,9 @@ class Paginate
 	protected $baseUrl = FALSE;
 	# display prev/next buttons
 	protected $show_PrevNext = FALSE;
+	# generate First and Last pages within all others with separators:
+	# Something as: 1 2 3 4 .. 9 (where '..' is separator)
+	protected $FirstToLast = FALSE;
 	# display first/last buttons
 	protected $show_FirstLast = FALSE;
 	# items per page
@@ -149,8 +152,23 @@ class Paginate
 			throw new Exception("First page can't be more than last!", 1);
 		}
 
+		$separators =  [];
+
+		if($this->FirstToLast){
+			if(($this->current - $first) >= 2 ){
+				$separators[] = $first;
+			}
+			if(($this->totals - $last) >= 2 ){
+				$separators[] = $last;
+			}			
+		}
+
 		for ($i=$first; $i <= $last; $i++) { 
-			$this->setPage((int)$i);
+			if(in_array((int)$i, $separators)){
+				$this->setSeparator();
+			} else{
+				$this->setPage((int)$i);				
+			}
 		}
 	}
 
@@ -168,11 +186,18 @@ class Paginate
 			$this->setPage($val, FALSE, $val==FALSE, $this->PrevNext["nextName"], $type);
 		} elseif ( $type == 'first' ) {
 			$val = $this->current > 1 ? 1 : FALSE;
-			$this->setPage($val, FALSE, $val==FALSE, $this->FirstLast["firstName"], $type);
+			$name = (isset($this->FirstLast["firstName"]) && !$this->FirstToLast ) ? $this->FirstLast["firstName"] : $val;
+			$this->setPage($val, FALSE, $val==FALSE, $name, $type);
 		} elseif ( $type == 'last' ){
 			$val = $this->current < $this->totals ? $this->totals : FALSE;
-			$this->setPage($val, FALSE, $val==FALSE, $this->FirstLast["lastName"], $type);
+			$name = (isset($this->FirstLast["lastName"]) && !$this->FirstToLast ) ? $this->FirstLast["lastName"] : $val;
+			$this->setPage($val, FALSE, $val==FALSE, $name, $type);
 		}
+ 	}
+
+ 	private function setSeparator()
+ 	{
+		$this->pages[] = $this->getPageData($separator = TRUE);
  	}
 
 	private function setPage($numb, $current = FALSE, $disabled = FALSE, $name = FALSE, $type = FALSE)
@@ -185,9 +210,9 @@ class Paginate
 		return $page ? str_replace("{{{PAGE}}}", $page, $this->urlString) : "#";
 	}
 
-	private function getPageData($page, $current = FALSE, $disabled = FALSE, $name = FALSE)
+	private function getPageData($page, $current = FALSE, $disabled = FALSE, $name = FALSE, $separator = FALSE)
 	{
-		return array("url" => $this->getUrl($page), "value"=>$page, "name"=>$name?:$page, "current"=>$current, "disabled"=>$disabled);
+		return array("url" => $this->getUrl($page), "value"=>$page, "name"=>$name?:$page, "current"=>$current, "disabled"=>$disabled, "separator"=>$separator);
 	}
 
 }
