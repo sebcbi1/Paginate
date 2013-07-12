@@ -3,16 +3,17 @@ Paginate
 
 Example:
 
-> $total = 123;# Count for all items in your pages;
-> $config = array(
->	'itemsPerPage'		=>	20,
->	'displayedPages'	=>	7,
->	'method'			=>	'query',
->	'param'				=>	'page',
->	'show_PrevNext'		=>	TRUE
->	);
-> $paginate = new Paginate($total, $config);
-> 
+```php
+$total = 123;# Count for all items in your pages;
+$config = array(
+	'itemsPerPage'		=>	20,
+	'displayedPages'	=>	7,
+	'method'			=>	'query',
+	'param'				=>	'page',
+	'show_PrevNext'		=>	TRUE
+);
+$paginate = new Paginate($total, $config);
+```
 
 
 Params avaible for config:
