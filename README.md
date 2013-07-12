@@ -15,6 +15,20 @@ $config = array(
 $paginate = new Paginate($total, $config);
 ```
 
+Public functions:
+```php
+function getPages(){} # returns all pages, ready to be loaded in a template.
+
+function renderHtml($layout, $engine = FALSE, $engineObject = FALSE){} # returns builded pagination HTML 
+```
+Params for function renderHtml:
+* $layout - fullpath to a layout file. You can see layouts for examples
+* $engine - a template engine. Currently you can set:
+	* FALSE or nothing = clean PHP code will be loaded
+	* smarty - this will use smarty template engine to build your template
+* $engineObject - if $engine is selected here you pass its object !
+! Remember ! Paginate class won't create any template engine object. That's way you may only pass TE object to it!
+
 
 Params avaible for config:
 * itemsTotal - Total items ! REQUIRED ! In construct its the first param to be set next after it is array with all other params.

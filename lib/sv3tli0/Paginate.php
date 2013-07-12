@@ -71,9 +71,9 @@ class Paginate
 		return $this->pages;
 	}
 
-	public function renderHtml($layout = FALSE, $engine = FALSE, $object = FALSE)
+	public function renderHtml($layout = FALSE, $engine = FALSE, $engineObject = FALSE)
 	{
-		$layout = new Layout($layout, $this->pages, $engine, $object);
+		$layout = new Layout($layout, $this->pages, $engine, $engineObject);
 		return $layout->getHTML();		
 	}
 
