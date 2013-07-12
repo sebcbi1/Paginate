@@ -17,10 +17,19 @@ $paginate = new Paginate($total, $config);
 
 Public functions:
 ```php
-function getPages(){} # returns all pages, ready to be loaded in a template.
+ # returns all pages, ready to be loaded in a template.
+function getPages(){}
 
-function renderHtml($layout, $engine = FALSE, $engineObject = FALSE){} # returns builded pagination HTML 
+# returns builded pagination HTML
+function renderHtml($layout, $engine = FALSE, $engineObject = FALSE){} 
+
+# get current page numb 
+function getCurrent(){}
+
+# get offset limit for queries
+function getOffset(){}
 ```
+
 Params for function renderHtml:
 * $layout - fullpath to a layout file. You can see layouts for examples
 * $engine - a template engine. Currently you can set:
