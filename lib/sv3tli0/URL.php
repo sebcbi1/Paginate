@@ -131,7 +131,7 @@ class URL
 
 	private function setSegments($path)
 	{
-		$this->segments = explode("/", "/".ltrim($path));
+		$this->segments = explode("/", "/".ltrim($path, "/"));
 	}
 
 	private function setParams($query)

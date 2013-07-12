@@ -171,6 +171,11 @@ class Paginate
 					continue;
 				}
 			}
+			if($this->show_FirstLast){
+				if($i == 1 || $i == $this->totals){
+					continue;
+				}
+			}
 			$this->setPage($i);							
 		}
 
