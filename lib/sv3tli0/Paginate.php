@@ -71,6 +71,16 @@ class Paginate
 		return $this->pages;
 	}
 
+	public function getCurrentPage()
+	{
+		return $this->current;
+	}
+
+	public function getOffset()
+	{
+		return (int) ( ( $this->current - 1 )  * $this->itemsPerPage );
+	}
+
 	public function renderHtml($layout = FALSE, $engine = FALSE, $engineObject = FALSE)
 	{
 		$layout = new Layout($layout, $this->pages, $engine, $engineObject);
