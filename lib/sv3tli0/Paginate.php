@@ -189,7 +189,7 @@ class Paginate
 			$this->setPage($i);							
 		}
 
-		if($this->FirstToLast && $this->totals >= $this->current){
+		if($this->FirstToLast && $this->totals > 1 && $this->totals >= $this->current){
 			$this->setPage($this->totals);
 		}
 
