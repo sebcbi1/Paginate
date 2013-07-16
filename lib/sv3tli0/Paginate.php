@@ -202,10 +202,10 @@ class Paginate
  	private function setSpecPage($type)
  	{
 		if( $type == 'prev' ) {
-			$val = $this->current>1 ? ( $this->current < $this->totals ? $this->current-1 : $this->totals ) : FALSE;
+			$val = $this->current > 1 ? ( $this->current <= $this->totals ? $this->current-1 : ($this->totals > 1 ? $this->totals-1 : FALSE ) ) : FALSE;
 			$this->setPage($val, FALSE, $val==FALSE, $this->PrevNext["prevName"], $type);
 		} elseif( $type == 'next' ) {
-			$val = $this->current < $this->totals ? ( $this->current >= 1 ? $this->current + 1 : 1 ): FALSE;
+			$val = $this->current < $this->totals ? ( $this->current >= 1 ? $this->current + 1 : FALSE ): FALSE;
 			$this->setPage($val, FALSE, $val==FALSE, $this->PrevNext["nextName"], $type);
 		} elseif ( $type == 'first' ) {
 			$val = $this->current > 1 ? 1 : FALSE;
