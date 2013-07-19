@@ -162,13 +162,10 @@ class Paginate
 			throw new Exception("First page can't be more than last!", 1);
 		}
 
-		if($this->FirstToLast){
-			$this->setPage(1);
-		}
-
 		for ($i=(int)$first; $i <= (int)$last; $i++) {
 			if($this->FirstToLast){
 				if($i == $first){
+					$this->setPage(1);
 					if( $i - 1 >= 1 ){
 						$this->setSeparator();
 					}
@@ -178,21 +175,12 @@ class Paginate
 					if( $this->totals - 1 >= $i ){
 						$this->setSeparator();
 					}
-					continue;
-				}
-			}
-			if($this->show_FirstLast){
-				if($i == 1 || $i == $this->totals){
+					$this->setPage($this->totals);
 					continue;
 				}
 			}
 			$this->setPage($i);							
 		}
-
-		if($this->FirstToLast && $this->totals > 1 && $this->totals >= $this->current){
-			$this->setPage($this->totals);
-		}
-
 	}
 
  	/**
