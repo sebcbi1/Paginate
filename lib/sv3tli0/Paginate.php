@@ -158,7 +158,7 @@ class Paginate
 			$first = ($last - $dif*2) > 1 ? ($last - $dif*2) : 1; 
 		}
 
-		if($first > $last) {
+		if($first > $last && $this->totals > 0) {
 			throw new Exception("First page can't be more than last!", 1);
 		}
 
