@@ -46,8 +46,7 @@ class Layout
 		}
 
 		$data = $this->data;
-		include_once($this->layout);
-		return $myvar;
+		return include_once($this->layout);
 	}
 
 	private function renderSmartyLayout()
