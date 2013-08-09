@@ -46,9 +46,7 @@ class Layout
 		}
 
 		$data = $this->data;
-		ob_start();
 		include_once($this->layout);
-		$myvar = ob_get_clean();
 		return $myvar;
 	}
 
