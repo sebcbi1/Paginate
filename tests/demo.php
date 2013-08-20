@@ -13,7 +13,7 @@ require_once($path . "Exception.php");
 
 $current_page = isset($_GET['page']) ?  $_GET['page'] : 2;
 
-$counter = 89;
+$counter = 1111;
 $limit = 10;
 
 $paginate_conf = [
@@ -22,8 +22,9 @@ $paginate_conf = [
 	'itemsPerPage' => $limit,
 	'show_PrevNext' => TRUE,
 #	'show_FirstLast' => TRUE,
-	'FirstToLast' => TRUE
+	'FirstToLast' => FALSE
 ];
-$pagination = new Paginate($counter,$paginate_conf);
+$pagination = new Paginate( $paginate_conf);
+$pagination->setTotalItems($counter);#->setTotalItems($counter);#->renderHtml();
 $pagination_html = $pagination->renderHtml();
-echo $pagination_html;
+echo $pagination_html;	

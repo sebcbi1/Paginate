@@ -13,7 +13,7 @@ class Paginate
 	# Total pages
 	private $totals;
 	# total items must be set !
-	private $itemsTotal = 0;
+	private $totalItems = 0;
 
 	# baseUrl for the links
 	protected $baseUrl = FALSE;
@@ -45,67 +45,82 @@ class Paginate
 	# Pages
 	protected $pages = [];
 
-	public function __construct($itemsTotal, $param = array())
+	public function __construct($param = array())
 	{
-		$this->itemsTotal = (int)$itemsTotal;
-
 		foreach ($param as $name => $value) {
 			if (property_exists($this, $name)) {
 				$this->$name = $value;
 			}
 		}
 		$this->init();
- 	} 
-	
-	private function init()
-	{
-		# Start up tasks
-		$this->startTasks();
+  	}
 
-		# Group all pages in correct order 
-		$this->setPages();
-	}
-
-	public function getPages()
-	{
-		return $this->pages;
-	}
-
-	public function getCurrentPage()
-	{
-		return $this->current;
-	}
-
-	public function getOffset()
-	{
-		return (int) ( ( $this->current - 1 )  * $this->itemsPerPage );
-	}
-
+ 	/* Public methods */
 	public function renderHtml($layout = FALSE, $engine = FALSE, $engineObject = FALSE)
 	{
+		$this->init();
+		$this->setPages();
 		$layout = new Layout($layout, $this->pages, $engine, $engineObject);
 		return $layout->getHTML();		
 	}
 
-	private function startTasks()
+ 	/* GET METHODS */
+	public function getOffset()
+	{
+		$this->init();
+		return (int) ( ( ( !empty($this->current) ? $this->current : 1 ) - 1 )  * $this->itemsPerPage );
+	}
+
+	public function getPages()
+	{
+		$this->init();
+		$this->setPages();
+		return $this->pages;
+	}
+
+ 	/* SET METHODS */
+ 	public function setTotalItems($totalItems = 0)
+ 	{
+ 		$this->totalItems = (int)$totalItems;
+ 	}
+
+	public function setCurrentPage($page)
+	{
+		$this->current = (int)$page > 1 ? (int)$page : 1;
+	}
+
+	public function setParam($param, $value)
+	{
+		if (property_exists($this, $name)) {
+			$this->$param = $value;
+		}
+	}
+
+	public function setParams(array $arr)
+	{
+		if(!empty($arr)){
+			foreach ($arr as $key => $value) {
+				$this->setParam($key, $value);
+			}
+		}
+	}
+
+ 	
+	/* Private methods */
+	private function init()
 	{
 		# prepare and set urlString for later building of link urls (depends on method)
 		$this->setUrlString();
 
 		# calculate total pages
 		$this->calculateTotalPages();
-
 	}
 
 	private function calculateTotalPages()
 	{
-		$this->totals = (int) ceil($this->itemsTotal / $this->itemsPerPage);
+		$this->totals = (int) ceil($this->totalItems / $this->itemsPerPage);
 	}
 
-	private function setCurrentPage($page)
-	{
-		$this->current = (int)$page > 1 ? (int)$page : 1;
-	}
 
 	private function setUrlString()
 	{
@@ -125,6 +140,9 @@ class Paginate
 
 	private function setPages()
 	{	
+		# empty pages array if this method is called more than once!
+		$this->pages = [];
+
 		if($this->show_PrevNext != FALSE){
 			$this->setSpecPage('prev');
 		}
