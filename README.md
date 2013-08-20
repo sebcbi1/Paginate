@@ -4,15 +4,15 @@ Paginate
 Example:
 
 ```php
-$total = 123;# Count for all items in your pages;
-$config = array(
+ $config = array(
+ 	'totalItems'		=> 1234,
 	'itemsPerPage'		=>	20,
 	'displayedPages'	=>	7,
 	'method'			=>	'query',
 	'param'				=>	'page',
 	'show_PrevNext'		=>	TRUE
 );
-$paginate = new Paginate($total, $config);
+$paginate = new Paginate($config);
 ```
 
 Public functions:
@@ -28,7 +28,21 @@ function getCurrent(){}
 
 # get offset limit for queries
 function getOffset(){}
+
+# Set totalItems if you cant count them on class init
+function setTotalItems($totalItems){}
+
+# Set current page - overwrites if there is set.
+function setCurrentPage($page){}
+
+# Resets any param from the init params
+function setParam($item, $value){} 
+
+# Resets any param from the init params for multiple elements ($params must be array!)
+function setParams($params){} 
 ```
+
+
 
 Params for function renderHtml:
 * $layout - fullpath to a layout file. You can see layouts for examples
@@ -40,7 +54,7 @@ Params for function renderHtml:
 
 
 Params avaible for config:
-* itemsTotal - Total items ! REQUIRED ! In construct its the first param to be set next after it is array with all other params.
+* totalItems - Total items ! REQUIRED ! In construct its the first param to be set next after it is array with all other params.
 * itemsPerPage - Items in a page needed for counting pages.
 * displayedPages - Max page links to be displayed.
 * baseUrl - base url for generating pages and catching current page.
