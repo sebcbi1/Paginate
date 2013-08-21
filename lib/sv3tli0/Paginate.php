@@ -71,6 +71,24 @@ class Paginate
 		return (int) ( ( ( !empty($this->current) ? $this->current : 1 ) - 1 )  * $this->itemsPerPage );
 	}
 
+	/**
+	 * Returns number of items per page.
+	 * 
+	 * @return integer
+	 */
+	public function getItemsPerPage()
+	{
+		return $this->itemsPerPage;
+	}
+
+	/**
+	 * @see getItemsPerPage()
+	 */
+	public function getLimit()
+	{
+		return $this->getItemsPerPage();
+	}
+
 	public function getPages()
 	{
 		$this->init();
