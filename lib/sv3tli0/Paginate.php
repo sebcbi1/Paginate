@@ -109,7 +109,7 @@ class Paginate
 
 	public function setParam($param, $value)
 	{
-		if (property_exists($this, $name)) {
+		if (property_exists($this, $param)) {
 			$this->$param = $value;
 		}
 	}
