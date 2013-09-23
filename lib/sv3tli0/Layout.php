@@ -13,7 +13,7 @@ class Layout
 	private $engine;
 	private $object;
 
-	public function __construct($layout = FALSE, $data = [], $engine = FALSE, $engineObject = FALSE)
+	public function __construct($layout = FALSE, $data = array(), $engine = FALSE, $engineObject = FALSE)
 	{
 		if(!$layout){
 			$layout = dirname(dirname(__DIR__)) . '/layouts/' .($engine ? "bootstrap_$engine.php" : "bootstrap.php");

@@ -145,3 +145,10 @@ class URL
 	}
 
 }
+
+
+class Exception extends \Exception
+{
+	
+}
+
