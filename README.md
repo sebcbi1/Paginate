@@ -79,4 +79,4 @@ When calling
 --------------
 
 
-[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=sv3tli0&url=[URL]&title=https://github.com/sv3tli0/Paginate&description=PHP+Paginate+script&title=Paginate&tags=github&category=software)
+[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=sv3tli0&url=https://github.com/sv3tli0/Paginate&description=PHP+Paginate+script&title=Paginate&tags=github&category=software)
