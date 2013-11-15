@@ -78,5 +78,6 @@ When calling
 
 --------------
 
+<script data-gittip-username="sv3tli0" src="//gttp.co/v1.js"></script>
 
 [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=sv3tli0&url=https://github.com/sv3tli0/Paginate&description=PHP+Paginate+script&title=Paginate&tags=github&category=software)
