@@ -384,7 +384,7 @@ class URL
 		$path     = $this->path ? $this->path : ''; 
 		$query    = $this->query ? '?' . $this->query : ''; 
 		$fragment = $this->fragment ? '#' . $this->fragment : ''; 
-		return "$scheme$user$pass$host$port/$path$query$fragment"; 
+		return (!empty($host)?"$scheme$user$pass$host$port":"")."/$path$query$fragment"; 
 	} 
 
 	private function setSegments($path)
