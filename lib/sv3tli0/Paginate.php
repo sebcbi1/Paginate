@@ -61,7 +61,7 @@ class Paginate
 		$this->init();
 		$this->setPages();
 		$layout = new Layout($layout, $this->pages, $engine, $engineObject);
-		return $layout->getHTML();		
+		return $layout->getHTML();
 	}
 
  	/* GET METHODS */
@@ -73,7 +73,7 @@ class Paginate
 
 	/**
 	 * Returns number of items per page.
-	 * 
+	 *
 	 * @return integer
 	 */
 	public function getItemsPerPage()
@@ -123,7 +123,7 @@ class Paginate
 		}
 	}
 
- 	
+
 	/* Private methods */
 	private function init()
 	{
@@ -142,7 +142,7 @@ class Paginate
 
 	private function setUrlString()
 	{
-		$url = $this->baseUrl ?: $_SERVER["REQUEST_URI"];
+		$url = $this->baseUrl ?: ltrim($_SERVER["REQUEST_URI"], '/');
 		$urlCl = new URL($url);
 		$method = $this->method == "segment" ? "segments" : "params";
 		$param = $this->method == "segment" ? $this->segment : $this->param;
@@ -157,7 +157,7 @@ class Paginate
 	}
 
 	private function setPages()
-	{	
+	{
 		# empty pages array if this method is called more than once!
 		$this->pages = array();
 
@@ -189,9 +189,9 @@ class Paginate
 		$first = ($this->current - $dif) > 1 ? $this->current - $dif : 1;
 		$last = ($this->current + $dif) < $this->totals ? $this->current + $dif : $this->totals;
 		if($first == 1 && $last < $this->totals){
-			$last = (1 + $dif*2) < $this->totals ? (1 + $dif*2)  : $this->totals; 
+			$last = (1 + $dif*2) < $this->totals ? (1 + $dif*2)  : $this->totals;
 		} elseif($last == $this->totals && $first > 1){
-			$first = ($last - $dif*2) > 1 ? ($last - $dif*2) : 1; 
+			$first = ($last - $dif*2) > 1 ? ($last - $dif*2) : 1;
 		}
 
 		if($first > $last && $this->totals > 0) {
@@ -215,7 +215,7 @@ class Paginate
 					continue;
 				}
 			}
-			$this->setPage($i);							
+			$this->setPage($i);
 		}
 	}
 

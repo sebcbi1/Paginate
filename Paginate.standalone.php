@@ -2,7 +2,7 @@
 namespace sv3tli0;
 /**
  * Stand alone version - all Objects at one place.
- * You have just to include this file in your project and to call it as usual with: sv3tli0\Paginate 
+ * You have just to include this file in your project and to call it as usual with: sv3tli0\Paginate
  * @author sv3tli0 <sfetliooo@gmail.com>
  * @copyright Copyright (c) 2013 sv3tli0
  * @license http://github.com/sv3tli0
@@ -63,7 +63,7 @@ class Paginate
 		$this->init();
 		$this->setPages();
 		$layout = new Layout($layout, $this->pages, $engine, $engineObject);
-		return $layout->getHTML();		
+		return $layout->getHTML();
 	}
 
  	/* GET METHODS */
@@ -75,7 +75,7 @@ class Paginate
 
 	/**
 	 * Returns number of items per page.
-	 * 
+	 *
 	 * @return integer
 	 */
 	public function getItemsPerPage()
@@ -125,7 +125,7 @@ class Paginate
 		}
 	}
 
- 	
+
 	/* Private methods */
 	private function init()
 	{
@@ -144,7 +144,7 @@ class Paginate
 
 	private function setUrlString()
 	{
-		$url = $this->baseUrl ?: $_SERVER["REQUEST_URI"];
+		$url = $this->baseUrl ?: ltrim($_SERVER["REQUEST_URI"], '/');
 		$urlCl = new URL($url);
 		$method = $this->method == "segment" ? "segments" : "params";
 		$param = $this->method == "segment" ? $this->segment : $this->param;
@@ -159,7 +159,7 @@ class Paginate
 	}
 
 	private function setPages()
-	{	
+	{
 		# empty pages array if this method is called more than once!
 		$this->pages = array();
 
@@ -191,9 +191,9 @@ class Paginate
 		$first = ($this->current - $dif) > 1 ? $this->current - $dif : 1;
 		$last = ($this->current + $dif) < $this->totals ? $this->current + $dif : $this->totals;
 		if($first == 1 && $last < $this->totals){
-			$last = (1 + $dif*2) < $this->totals ? (1 + $dif*2)  : $this->totals; 
+			$last = (1 + $dif*2) < $this->totals ? (1 + $dif*2)  : $this->totals;
 		} elseif($last == $this->totals && $first > 1){
-			$first = ($last - $dif*2) > 1 ? ($last - $dif*2) : 1; 
+			$first = ($last - $dif*2) > 1 ? ($last - $dif*2) : 1;
 		}
 
 		if($first > $last && $this->totals > 0) {
@@ -217,7 +217,7 @@ class Paginate
 					continue;
 				}
 			}
-			$this->setPage($i);							
+			$this->setPage($i);
 		}
 	}
 
@@ -262,7 +262,7 @@ class Paginate
 		return array("url" => $this->getUrl($page), "value"=>$page, "name"=>$name?:$page, "current"=>$current, "disabled"=>$disabled, "separator"=>$separator);
 	}
 
-} 
+}
 
 class URL
 {
@@ -284,7 +284,7 @@ class URL
 	public function __construct($url)
 	{
 		$this->init($url);
-	}	
+	}
 
 	private function init($url)
 	{
@@ -327,7 +327,7 @@ class URL
 	{
 		return $this->buildUrl();
 	}
- 	
+
  	/**
  	 *	Updating elements
 	 */
@@ -374,18 +374,18 @@ class URL
 		}
 	}
 
-	private function buildUrl() { 
-		$scheme   = $this->scheme ? $this->scheme . '://' : ''; 
-		$host     = $this->host ? $this->host : ''; 
-		$port     = $this->port ? ':' . $this->port : ''; 
-		$user     = $this->user ? $this->user : ''; 
-		$pass     = $this->pass ? ':' . $this->pass  : ''; 
-		$pass     = ($user || $pass) ? "$pass@" : ''; 
-		$path     = $this->path ? $this->path : ''; 
-		$query    = $this->query ? '?' . $this->query : ''; 
-		$fragment = $this->fragment ? '#' . $this->fragment : ''; 
-		return (!empty($host)?"$scheme$user$pass$host$port":"")."/$path$query$fragment"; 
-	} 
+	private function buildUrl() {
+		$scheme   = $this->scheme ? $this->scheme . '://' : '';
+		$host     = $this->host ? $this->host : '';
+		$port     = $this->port ? ':' . $this->port : '';
+		$user     = $this->user ? $this->user : '';
+		$pass     = $this->pass ? ':' . $this->pass  : '';
+		$pass     = ($user || $pass) ? "$pass@" : '';
+		$path     = $this->path ? $this->path : '';
+		$query    = $this->query ? '?' . $this->query : '';
+		$fragment = $this->fragment ? '#' . $this->fragment : '';
+		return (!empty($host)?"$scheme$user$pass$host$port":"")."/$path$query$fragment";
+	}
 
 	private function setSegments($path)
 	{
@@ -403,7 +403,7 @@ class URL
 	}
 
 }
- 
+
 class Layout
 {
 	private $layout;
@@ -429,7 +429,7 @@ class Layout
 			case 'smarty':
 				return $this->renderSmartyLayout();
 				break;
-			
+
 			default:
 				return $this->renderPhpLayout();
 				# code...
@@ -458,5 +458,5 @@ class Layout
 	{
 		return $this->renderLayout();
 	}
-		
-}	
+
+}
