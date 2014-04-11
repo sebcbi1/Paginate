@@ -71,6 +71,13 @@ class Paginate
 		return (int) ( ( ( !empty($this->current) ? $this->current : 1 ) - 1 )  * $this->itemsPerPage );
 	}
 
+	public function getCurrentPage()
+	{
+		$this->init();
+		return (int) $this->current;
+	}
+
+
 	/**
 	 * Returns number of items per page.
 	 *
