@@ -77,6 +77,11 @@ class Paginate
 		return (int) $this->current;
 	}
 
+	public function getTotalPages()
+	{
+		$this->init();
+		return (int) $this->totals;
+	}
 
 	/**
 	 * Returns number of items per page.
