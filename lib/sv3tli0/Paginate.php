@@ -264,6 +264,13 @@ class Paginate
 
 	private function getUrl($page = FALSE)
 	{
+		 if ($page==1) {
+			$url = str_replace("page={{{PAGE}}}", '', $this->urlString);
+			$url = str_replace('&&', '&' , $url);
+			$url = str_replace('?&', '?' , $url);
+			$url = rtrim( $url, '?&');
+			return $url;
+		}
 		return $page ? str_replace("{{{PAGE}}}", $page, $this->urlString) : "#";
 	}
 
